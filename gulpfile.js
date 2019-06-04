@@ -6,11 +6,18 @@ const cleanCSS = require('gulp-clean-css');
 const uglify = require('gulp-uglify');
 const del = require('del');
 const browserSync = require('browser-sync').create();
+const sourcemaps = require('gulp-sourcemaps');
+const less = require('gulp-less');
 
 //Порядок подключения css файлов
 const cssFiles = [
    './src/css/main.css',
    './src/css/media.css'
+]
+//Порядок подключения less файлов
+const lessFiles = [
+   './src/css/main.less',
+   './src/css/media.less'
 ]
 //Порядок подключения js файлов
 const jsFiles = [
@@ -23,6 +30,8 @@ function styles() {
    //Шаблон для поиска файлов CSS
    //Всей файлы по шаблону './src/css/**/*.css'
    return gulp.src(cssFiles)
+   .pipe(sourcemaps.init())
+   .pipe(less())
    //Объединение файлов в один
    .pipe(concat('style.css'))
    //Добавить префиксы
@@ -34,6 +43,7 @@ function styles() {
    .pipe(cleanCSS({
       level: 2
    }))
+   .pipe(sourcemaps.write('./'))
    //Выходная папка для стилей
    .pipe(gulp.dest('./build/css'))
    .pipe(browserSync.stream());
@@ -69,6 +79,8 @@ function watch() {
   });
   //Следить за CSS файлами
   gulp.watch('./src/css/**/*.css', styles)
+  //Следить за CSS файлами
+  gulp.watch('./src/css/**/*.less', styles)
   //Следить за JS файлами
   gulp.watch('./src/js/**/*.js', scripts)
   //При изменении HTML запустить синхронизацию
