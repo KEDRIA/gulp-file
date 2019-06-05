@@ -15,10 +15,7 @@ const cssFiles = [
    './src/css/media.css'
 ]
 //Порядок подключения less файлов
-const lessFiles = [
-   './src/css/main.less',
-   './src/css/media.less'
-]
+
 //Порядок подключения js файлов
 const jsFiles = [
    './src/js/lib.js',
@@ -29,11 +26,10 @@ const jsFiles = [
 function styles() {
    //Шаблон для поиска файлов CSS
    //Всей файлы по шаблону './src/css/**/*.css'
-   return gulp.src(cssFiles)
+   return gulp.src('./src/css/main.less')
    .pipe(sourcemaps.init())
    .pipe(less())
-   //Объединение файлов в один
-   .pipe(concat('style.css'))
+ 
    //Добавить префиксы
    .pipe(autoprefixer({
       browsers: ['last 2 versions'],
@@ -77,8 +73,7 @@ function watch() {
           baseDir: "./"
       }
   });
-  //Следить за CSS файлами
-  gulp.watch('./src/css/**/*.css', styles)
+  
   //Следить за CSS файлами
   gulp.watch('./src/css/**/*.less', styles)
   //Следить за JS файлами
